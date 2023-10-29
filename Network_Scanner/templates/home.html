@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../staticfiles/home.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Network Scanner</title>
+</head>
+<body class="m-2 border-2 border-black p-3">
+    <div class="header">
+        <h2 class="text-3xl font-bold">Welcome to our website</h2>
+        <p class="text-lg text-gray-700">This website is designed to perform an analysis of your existing network. It can provide you with information about the MAC addresses and the open ports by using IP addresses.</p>
+        <h2 class="text-xl font-bold">Steps to use this website:</h2>
+        <p><span class="text-blue-700 font-semibold text-s">Step 1:</span> Start by identifying your network's IP address. You can do this by using the following commands: on macOS and Linux, use "ifconfig," and on Windows, use "ipconfig."</p>
+        <p><span class="text-blue-700 font-semibold text-s">Step 2:</span> Input your network's address range or the specific IP address you wish to scan into the provided input field.</p>
+        <p><span class="text-blue-700 font-semibold text-s">Step 3:</span> Choose the range of ports you want to analyze by specifying the starting and ending ports. Keep in mind that the time required for the output will depend on the size of the port range and the range of IP addresses.</span></p>
+        <p><span class="text-blue-700 font-semibold text-s">Step 4:</span> Once you've configured your options, click the "Submit" button to initiate the scanning process.</p>
+    </div>
+    <div class="input_section mt-5">
+        <form action="{% url "home" %}" method="post">
+            {% csrf_token %}
+            <label class="text-red-600 font-semibold" for="ip_address">Ip_Address: </label>
+            <input class="outline-none border border-black rounded-xl px-2 py-1" type="text" id="ip_address" name="ip_address"><br><br>
+            <label class="text-red-600 font-semibold" for="start">Starting Port Number: </label>
+            <input class="outline-none border border-black rounded-xl px-2 py-1" type="number" id="start" name="start"><br><br>
+            <label class="text-red-600 font-semibold" for="end">ending Port Number: </label>
+            <input class="outline-none border border-black rounded-xl px-2 py-1" type="number" id="end" name="end"><br><br>
+            <button class="bg-black text-white px-2 py-1 rounded-lg" type="submit">Submit</button>
+        </form>
+    </div>
+    <div class="output_section mt-2">
+        {% for device in devices %}
+            <div class="device border border-black p-3 mb-2 rounded-lg shadow-lg">
+                <p><span class="text-red-600 font-semibold">Ip_Address:</span> {{device.0}}</p>
+                <p><span class="text-red-600 font-semibold">MAC_Address:</span> {{device.1}}</p>
+                {% if device.2 %}
+                    <p class="ml-40 font-semibold">Open ports are: </p>
+                    {% for port in device.2 %}
+                        <p class="ml-60">{{port}}</p>
+                    {% endfor%}
+                {% else %}
+                <p class="ml-40 font-semibold">No open ports found.</p>
+                {% endif %}
+            </div>
+        {% endfor %}
+    </div>
+</body>
+</html>
