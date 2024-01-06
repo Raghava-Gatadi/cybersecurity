@@ -33,7 +33,7 @@ message = "Hello, World!\~my_secret_key"
 ```
 
 
-# Project 2: Network Scanner
+# [Project 2: Network Scanner](Network_Scanner)
 
 ## Overview
 
