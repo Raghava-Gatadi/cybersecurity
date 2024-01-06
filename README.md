@@ -30,6 +30,7 @@ message = "Hello, World!\~my_secret_key"
 
 # Decryption at the Receiver's End
 # ...
+```
 
 
 # Project 2: Network Scanner
@@ -56,4 +57,4 @@ IP Address       MAC Address        Open Ports
 192.168.1.1      00:1A:2B:3C:4D:5E   22, 80, 443
 192.168.1.2      01:2A:3B:4C:5D:6E   80, 8080
 # ...
-
+```
