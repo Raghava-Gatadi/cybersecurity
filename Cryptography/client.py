@@ -1,3 +1,9 @@
+key='SecretKey'
+import socket
+import threading
+from AES import *
+from colorama import Fore,Style
+
 def receive_data(server_socket, block_size=16):
     data = b""
     while True:
