@@ -2,7 +2,7 @@
 
 This repository contains two projects focusing on network security and communication. The projects are independent, each serving a unique purpose.
 
-## Project 1: AES Encryption and Decryption in Socket Programming[Cryptography]
+## [Project 1: AES Encryption and Decryption in Socket Programming](Cryptography)
 
 ### Overview
 
