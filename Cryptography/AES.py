@@ -1,4 +1,11 @@
 import binascii
+def mix_column(col):
+    c_0 = col[0]
+    all_xor = col[0] ^ col[1] ^ col[2] ^ col[3]
+    col[0] ^= all_xor ^ multiply_2(col[0] ^ col[1])
+    col[1] ^= all_xor ^ multiply_2(col[1] ^ col[2])
+    col[2] ^= all_xor ^ multiply_2(col[2] ^ col[3])
+    col[3] ^= all_xor ^ multiply_2(c_0 ^ col[3])
 s_box_string = '63 7c 77 7b f2 6b 6f c5 30 01 67 2b fe d7 ab 76' \
                'ca 82 c9 7d fa 59 47 f0 ad d4 a2 af 9c a4 72 c0' \
                'b7 fd 93 26 36 3f f7 cc 34 a5 e5 f1 71 d8 31 15' \
@@ -19,71 +26,63 @@ s_box_string = '63 7c 77 7b f2 6b 6f c5 30 01 67 2b fe d7 ab 76' \
 
 s_box = bytearray.fromhex(s_box_string)
 
-#this function subsitutes the input using S-box
-def sub_word(word: [int]) -> bytes:
+def sub_word(word):
     substituted_word = bytes(s_box[i] for i in word)
     return substituted_word
 
-#generates a round constant for each round
-def rcon(i: int) -> bytes:
-    rcon_lookup = bytearray.fromhex('01020408102040801b36')
-    if i <= 0 or i > len(rcon_lookup):
+def round_constant(i):
+    round_constant_lookup = bytearray.fromhex('01020408102040801b36')
+    if i <= 0 or i > len(round_constant_lookup):
         return bytes([0, 0, 0, 0])
     
     if i == 1:
-        return bytes([rcon_lookup[0], 0, 0, 0])
+        return bytes([round_constant_lookup[0], 0, 0, 0])
     
-    rcon_value = bytes([rcon_lookup[i-1], 0, 0, 0])
-    return rcon_value
-#round constant is used to generate variability in round keys 
+    round_constant_value = bytes([round_constant_lookup[i-1], 0, 0, 0])
+    return round_constant_value
 
-#performs XOR operation between two bytes
-def xor_bytes(a: bytes, b: bytes) -> bytes:
+def xor_bytes(a, b):
     return bytes([x ^ y for (x, y) in zip(a, b)])
 
-#performs one bytr circular left shift on input
-def rot_word(word: [int]) -> [int]:
+def rot_word(word):
     return word[1:] + word[:1]
 
-#nb->number of columns in state
-#nk->number of columns in key
-def key_expansion(key: bytes, nb: int = 4) -> [[[int]]]:
+#state_cols->number of columns in state
+#key_cols->number of columns in key
+def key_expansion(key, state_cols: int = 4):
+    print("Current Key used: ", key)
+    key_cols = len(key) // 4
+    key_length_bits = len(key) * 8
 
-    nk = len(key) // 4
-    key_bit_length = len(key) * 8
-
-    if key_bit_length == 128:
-        nr = 10
-    elif key_bit_length == 192:
-        nr = 12
+    if key_length_bits == 128:
+        no_rounds = 10
+    elif key_length_bits == 192:
+        no_rounds = 12
     else:  # 256-bit keys
-        nr = 14
+        no_rounds = 14
 
     w = state_from_bytes(key)
-
-    for i in range(nk, nb * (nr + 1)):
+    # print(w)
+    for i in range(key_cols, state_cols * (no_rounds + 1)):
         temp = w[i-1] #previous value of word
-        if i % nk == 0:
-            temp = xor_bytes(sub_word(rot_word(temp)), rcon(i // nk))
-        elif nk > 6 and i % nk == 4:
+        if i % key_cols == 0:
+            temp = xor_bytes(sub_word(rot_word(temp)), round_constant(i // key_cols))
+        elif key_cols > 6 and i % key_cols == 4:
             temp = sub_word(temp)
-        w.append(xor_bytes(w[i - nk], temp))
+        w.append(xor_bytes(w[i - key_cols], temp))
 
     return [w[i*4:(i+1)*4] for i in range(len(w) // 4)]
 
-#XORs each byte of the state with the corresponding byte of the round key
-def add_round_key(state: [[int]], key_schedule: [[[int]]], round: int):
+def add_round_key(state, key_schedule, round):
     round_key = key_schedule[round]
     for r in range(len(state)):
         state[r] = [state[r][c] ^ round_key[r][c] for c in range(len(state[0]))]
 
-#substitutes each byte in state using s-box
-def sub_bytes(state: [[int]]):
+def sub_bytes(state):
     for r in range(len(state)):
         state[r] = [s_box[state[r][c]] for c in range(len(state[0]))]
 
-
-def shift_rows(state: [[int]]):
+def shift_rows(state):
     '''[00, 10, 20, 30]     [00, 10, 20, 30]
        [01, 11, 21, 31] --> [11, 21, 31, 01]
        [02, 12, 22, 32]     [22, 32, 02, 12]
@@ -92,46 +91,48 @@ def shift_rows(state: [[int]]):
     state[0][2], state[1][2], state[2][2], state[3][2] = state[2][2], state[3][2], state[0][2], state[1][2]
     state[0][3], state[1][3], state[2][3], state[3][3] = state[3][3], state[0][3], state[1][3], state[2][3]
 
-#used to multiply by 2 in Galois field
-def xtime(a: int) -> int:
+def multiply_2(a):
     if a & 0x80:
-        return ((a << 1) ^ 0x1b) & 0xff #0x1b is irreduciple polynomial in GF(8)
+        return ((a << 1) ^ 0x1b) & 0xff #0x1b is irreducible polynomial in GF(8)
     return a << 1
 
+def multiply_3(num):
+    result = num << 1  
+    if (num & 0x80):  
+        result ^= 0x1b  
+    return result
 
-def mix_column(col: [int]):
-    c_0 = col[0]
-    all_xor = col[0] ^ col[1] ^ col[2] ^ col[3]
-    col[0] ^= all_xor ^ xtime(col[0] ^ col[1])
-    col[1] ^= all_xor ^ xtime(col[1] ^ col[2])
-    col[2] ^= all_xor ^ xtime(col[2] ^ col[3])
-    col[3] ^= all_xor ^ xtime(c_0 ^ col[3])
+def mix_Column(col):
+    c_0, c_1, c_2, c_3 = col[0], col[1], col[2], col[3]      
+    col[0] = multiply_2(c_0) ^ multiply_3(c_1) ^ c_2 ^ c_3   # [0x02 0x03 0x01 0x01] [c_0]   [c_0']
+    col[1] = c_0 ^ multiply_2(c_1) ^ multiply_3(c_2) ^ c_3   # [0x01 0x02 0x03 0x01] [c_1] = [c_1'] 
+    col[2] = c_0 ^ c_1 ^ multiply_2(c_2) ^ multiply_3(c_3)   # [0x01 0x01 0x02 0x03] [c_2]   [c_2']
+    col[3] = multiply_3(c_0) ^ c_1 ^ c_2 ^ multiply_2(c_3)   # [0x03 0x01 0x01 0x02] [c_3]   [c_3']
 
-
-def mix_columns(state: [[int]]):
+def mix_columns(state):
     for r in state:
         mix_column(r)
 
 #converts bytes to 2D list representing a state
-def state_from_bytes(data: bytes) -> [[int]]:
+def state_from_bytes(data):
     state = [data[i*4:(i+1)*4] for i in range(len(data) // 4)]
     return state
 
 #converts state into bytes
-def bytes_from_state(state: [[int]]) -> bytes:
+def bytes_from_state(state):
     return bytes(state[0] + state[1] + state[2] + state[3])
 
 
-def aes_encryption(data: bytes, key: bytes) -> bytes:
+def aes_encryption(data, key):
 
-    key_bit_length = len(key) * 8
+    key_length_bits = len(key) * 8
 
-    if key_bit_length == 128:
-        nr = 10
-    elif key_bit_length == 192:
-        nr = 12
+    if key_length_bits == 128:
+        no_rounds = 10
+    elif key_length_bits == 192:
+        no_rounds = 12
     else:  # 256-bit keys
-        nr = 14
+        no_rounds = 14
 
     state = state_from_bytes(data)
 
@@ -139,7 +140,7 @@ def aes_encryption(data: bytes, key: bytes) -> bytes:
 
     add_round_key(state, key_schedule, round=0)
 
-    for round in range(1, nr):
+    for round in range(1, no_rounds):
         sub_bytes(state)
         shift_rows(state)
         mix_columns(state)
@@ -147,21 +148,10 @@ def aes_encryption(data: bytes, key: bytes) -> bytes:
 
     sub_bytes(state)
     shift_rows(state)
-    add_round_key(state, key_schedule, round=nr)
+    add_round_key(state, key_schedule, round=no_rounds)
 
     cipher = bytes_from_state(state)
     return cipher
-
-
-def inv_shift_rows(state: [[int]]) -> [[int]]:
-    # [00, 10, 20, 30]     [00, 10, 20, 30]
-    # [01, 11, 21, 31] <-- [11, 21, 31, 01]
-    # [02, 12, 22, 32]     [22, 32, 02, 12]
-    # [03, 13, 23, 33]     [33, 03, 13, 23]
-    state[1][1], state[2][1], state[3][1], state[0][1] = state[0][1], state[1][1], state[2][1], state[3][1]
-    state[2][2], state[3][2], state[0][2], state[1][2] = state[0][2], state[1][2], state[2][2], state[3][2]
-    state[3][3], state[0][3], state[1][3], state[2][3] = state[0][3], state[1][3], state[2][3], state[3][3]
-    return
 
 
 inv_s_box_string = '52 09 6a d5 30 36 a5 38 bf 40 a3 9e 81 f3 d7 fb' \
@@ -184,69 +174,60 @@ inv_s_box_string = '52 09 6a d5 30 36 a5 38 bf 40 a3 9e 81 f3 d7 fb' \
 inv_s_box = bytearray.fromhex(inv_s_box_string)
 
 
-def inv_sub_bytes(state: [[int]]) -> [[int]]:
+def inv_sub_bytes(state):
     for r in range(len(state)):
         state[r] = [inv_s_box[state[r][c]] for c in range(len(state[0]))]
+        
+def inv_shift_rows(state):
+    state[1][1], state[2][1], state[3][1], state[0][1] = state[0][1], state[1][1], state[2][1], state[3][1]
+    state[2][2], state[3][2], state[0][2], state[1][2] = state[0][2], state[1][2], state[2][2], state[3][2]
+    state[3][3], state[0][3], state[1][3], state[2][3] = state[0][3], state[1][3], state[2][3], state[3][3]
+    return
 
 
-def xtimes_0e(b):
+def multiply_2s_0e(b):
     # 0x0e = 14 = b1110 = ((x * 2 + x) * 2 + x) * 2
-    return xtime(xtime(xtime(b) ^ b) ^ b)
-def xtimes_0b(b):
+    return multiply_2(multiply_2(multiply_2(b) ^ b) ^ b)
+def multiply_2s_0b(b):
     # 0x0b = 11 = b1011 = ((x*2)*2+x)*2+x
-    return xtime(xtime(xtime(b)) ^ b) ^ b
-def xtimes_0d(b):
+    return multiply_2(multiply_2(multiply_2(b)) ^ b) ^ b
+def multiply_2s_0d(b):
     # 0x0d = 13 = b1101 = ((x*2+x)*2)*2+x
-    return xtime(xtime(xtime(b) ^ b)) ^ b
-def xtimes_09(b):
+    return multiply_2(multiply_2(multiply_2(b) ^ b)) ^ b
+def multiply_2s_09(b):
     # 0x09 = 9  = b1001 = ((x*2)*2)*2+x
-    return xtime(xtime(xtime(b))) ^ b
+    return multiply_2(multiply_2(multiply_2(b))) ^ b
 
 
-def inv_mix_column(col: [int]):
+def inv_mix_column(col):
     c_0, c_1, c_2, c_3 = col[0], col[1], col[2], col[3]
-    col[0] = xtimes_0e(c_0) ^ xtimes_0b(c_1) ^ xtimes_0d(c_2) ^ xtimes_09(c_3)
-    col[1] = xtimes_09(c_0) ^ xtimes_0e(c_1) ^ xtimes_0b(c_2) ^ xtimes_0d(c_3)
-    col[2] = xtimes_0d(c_0) ^ xtimes_09(c_1) ^ xtimes_0e(c_2) ^ xtimes_0b(c_3)
-    col[3] = xtimes_0b(c_0) ^ xtimes_0d(c_1) ^ xtimes_09(c_2) ^ xtimes_0e(c_3)
+    col[0] = multiply_2s_0e(c_0) ^ multiply_2s_0b(c_1) ^ multiply_2s_0d(c_2) ^ multiply_2s_09(c_3) # [0x0e 0x0b 0x0d 0x09] [c_0]   [c_0']
+    col[1] = multiply_2s_09(c_0) ^ multiply_2s_0e(c_1) ^ multiply_2s_0b(c_2) ^ multiply_2s_0d(c_3) # [0x09 0x0e 0x0b 0x0d] [c_1] = [c_1']
+    col[2] = multiply_2s_0d(c_0) ^ multiply_2s_09(c_1) ^ multiply_2s_0e(c_2) ^ multiply_2s_0b(c_3) # [0x0d 0x09 0x0e 0x0b] [c_2]   [c_2']
+    col[3] = multiply_2s_0b(c_0) ^ multiply_2s_0d(c_1) ^ multiply_2s_09(c_2) ^ multiply_2s_0e(c_3) # [0x0b 0x0d 0x09 0x0e] [c_3]   [c_3']
 
 
-def inv_mix_columns(state: [[int]]) -> [[int]]:
+def inv_mix_columns(state):
     for r in state:
         inv_mix_column(r)
 
-
-# def inv_mix_column_optimized(col: [int]):
-    #     u = xtime(xtime(col[0] ^ col[2]))
-    #     v = xtime(xtime(col[1] ^ col[3]))
-    #     col[0] ^= u
-    #     col[1] ^= v
-    #     col[2] ^= u
-    #     col[3] ^= v
-
-
-    # def inv_mix_columns_optimized(state: [[int]]) -> [[int]]:
-    #     for r in state:
-    #         inv_mix_column_optimized(r)
-    #     mix_columns(state)
-def aes_decryption(cipher: bytes, key: bytes) -> bytes:
+def aes_decryption(cipher, key):
 
     key_byte_length = len(key)
-    key_bit_length = key_byte_length * 8
-    nk = key_byte_length // 4
+    key_length_bits = key_byte_length * 8
 
-    if key_bit_length == 128:
-        nr = 10
-    elif key_bit_length == 192:
-        nr = 12
+    if key_length_bits == 128:
+        no_rounds = 10
+    elif key_length_bits == 192:
+        no_rounds = 12
     else:  # 256-bit keys
-        nr = 14
+        no_rounds = 14
 
     state = state_from_bytes(cipher)
     key_schedule = key_expansion(key)
-    add_round_key(state, key_schedule, round=nr)
+    add_round_key(state, key_schedule, round=no_rounds)
 
-    for round in range(nr-1, 0, -1):
+    for round in range(no_rounds-1, 0, -1):
         inv_shift_rows(state)
         inv_sub_bytes(state)
         add_round_key(state, key_schedule, round)
@@ -259,12 +240,12 @@ def aes_decryption(cipher: bytes, key: bytes) -> bytes:
     plain = bytes_from_state(state)
     return plain
 
-def add_padding(data: bytes, block_size: int = 32) -> bytes:
+def add_padding(data, block_size: int = 32):
     padding_length = block_size - len(data) % block_size
     padding = bytes([padding_length] * padding_length)
     return data + padding
 
-def remove_padding(data: bytes) -> bytes:
+def remove_padding(data):
     padding_length = data[-1]
     return data[:-padding_length]
 
