@@ -3,6 +3,8 @@ import threading
 from AES import *
 from colorama import Fore, Style
 
+key = "SecretKey"
+
 def receive_data(client_socket, block_size=16):
     data = b""
     while True:
@@ -18,14 +20,20 @@ def send_data(client_socket, data):
     client_socket.sendall(data)
 
 def handle_client(client_socket):
+    global key
     while True:
         encrypted_data = receive_data(client_socket)
         reciever_1 = Style.BRIGHT + Fore.GREEN + "\nReceived Encrypted Data from client:" + Style.RESET_ALL
         reciever_2 = Style.BRIGHT + Fore.GREEN + "Decrypted text: " + Style.RESET_ALL
         print(reciever_1, encrypted_data)
-        print(reciever_2, aes_decrypt(encrypted_data, 'SecretKey'))
+        message = aes_decrypt(encrypted_data, key)
+        text = message.split('\~')
+        print(reciever_2, message)
+        if(len(text)!=1):
+            key = text[len(text)-1]
 
 def main():
+    global key
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     port = 12345
     server_socket.bind(('0.0.0.0', port)) 
@@ -39,15 +47,18 @@ def main():
     # Start a new thread to handle receiving data from the client
     client_thread = threading.Thread(target=handle_client, args=(client_socket,))
     client_thread.start()
-
+    
     while True:
         # Allow the server to send a message
         send = Style.BRIGHT + Fore.RED + "\nEnter your response: " + Style.RESET_ALL
         response = input(send)
-        encrypted_response = aes_encrypt(response, 'SecretKey')
+        text = response.split('\~')
+        encrypted_response = aes_encrypt(response, key)
         data = Style.BRIGHT + Fore.RED + "Encrypted value of your Message: " + Style.RESET_ALL
         print(data, encrypted_response)
         send_data(client_socket, encrypted_response)
+        if(len(text)!=1):
+            key = text[len(text)-1]
 
 if __name__ == "__main__":
     main()
