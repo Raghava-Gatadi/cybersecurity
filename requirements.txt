@@ -6,3 +6,10 @@ numpy==1.9.1
 wsgiref==0.1.2
 wxPython==3.0.0.0
 wxPython-common==3.0.0.0
+commonmark==0.9.1
+mysql-connector-python==8.0.29
+protobuf==3.20.1
+pycryptodome==3.14.1
+Pygments==2.12.0
+pyperclip==1.8.2
+rich==12.3.0
