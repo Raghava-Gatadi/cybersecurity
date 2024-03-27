@@ -1,63 +1,33 @@
 # Repository: SecureSocketAndScanner
 
-This repository contains two projects focusing on network security and communication. The projects are independent, each serving a unique purpose.
+This repository contains multiple projects focusing on network security, communication and password management. The projects are independent, each serving a unique purpose.
 
-## [Project 1: AES Encryption and Decryption in Socket Programming](Cryptography)
+## [Project 1: Password Strength Checker](Password_manager_checker/password_strength.py)
+### overview
+This project is a comprehensive Python application designed to evaluate password robustness. It employs a set of predefined criteria, including length, presence of uppercase and lowercase letters, numerical digits, and special characters, to determine the strength of a provided password. The goal of this project is to enhance security by encouraging the use of strong, complex passwords.
+
+## [Project 2: Password Manager](Password_manager_checker/password_manager/)
+### overview
+his project is an efficient command-line password manager designed to enhance user security. It empowers users to generate, store, and retrieve passwords for various accounts. Key features include:
+
+* **Command Line Interface:** A user-friendly and straightforward interface for seamless interaction.
+* **Master Password Validation:** Ensures the authenticity of the user by validating the master password.
+* **Password Management:** Allows users to create new entries, save them securely, and retrieve them when needed.
+* **Clipboard Integration:** Automatically copies the retrieved password to the clipboard for easy use.
+* **Random Password Generation:** Generates robust passwords composed of alphabets, numbers, and special characters, enhancing account security.
+  
+This project, while simple in its command-line approach, provides a robust solution for password management needs.
+
+
+## [Project 3: AES Encryption and Decryption in Socket Programming](Cryptography)
 
 ### Overview
 
 This project establishes a secure connection between a client and a server (MacBook and Windows) using socket programming. The messages exchanged between the client and server are encrypted using the AES (Advanced Encryption Standard) algorithm. The AES function implemented in the code is capable of utilizing 128-, 192-, and 256-bit keys for encryption and decryption.
 
-### Key Features
+## [Project 4: Network Scanner](Network_Scanner)
 
-- **Dynamic Key Management:** Instead of using a fixed key for every session, the code allows users to include a key in their messages. The key is added using the delimiter `\~`. If multiple delimiters are found in the message, the last one is used as the key. If no delimiter is found, the previous key is used.
-
-### Instructions
-
-1. Clone the repository.
-2. Compile and run the server code on one machine.
-3. Compile and run the client code on another machine.
-4. Communicate securely with encrypted messages.
-
-### Example
-
-```python
-# Example Message
-message = "Hello, World!\~my_secret_key"
-
-# Encrypted Message Sent Over the Network
-# ...
-
-# Decryption at the Receiver's End
-# ...
-```
-
-
-# [Project 2: Network Scanner](Network_Scanner)
-
-## Overview
+### Overview
 
 This Django project provides a web-based network scanning tool that identifies systems connected to the user's network. Utilizing the Django framework, the application displays the IP addresses and MAC addresses of the connected systems and identifies any open ports on those systems. The project leverages the power of Django's web framework for a user-friendly and interactive experience.
 
-## Instructions
-
-1. Clone the repository.
-2. Install the required dependencies using the following command:
-
-    ```bash
-    pip install -r requirements.txt
-    ```
-3. Run the Django development server:
-
-    ```bash
-    python manage.py runserver
-    ```
-4. Open your web browser and navigate to `http://localhost:8000` to access the network scanner application.
-
-5. Use the web interface to scan the network and view the list of connected systems, their IP addresses, MAC addresses, and open ports.
-
-## Example
-
-Visit `http://localhost:8000` in your web browser after running the development server to start using the network scanner.
-
-Feel free to explore and utilize this Django-based network scanner for understanding the devices connected to your network and identifying open ports. If you encounter any issues or have suggestions, please open an issue in the repository. Happy scanning!
