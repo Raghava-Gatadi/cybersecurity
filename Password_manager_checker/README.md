@@ -11,7 +11,7 @@ This is a Python script that checks the strength of a password. It evaluates pas
 2. run the file using `Python3 password_strength.py`
 3. Enter the input
 
-## Project 2: Command Line Password Manager
+## [Project 2: Command Line Password Manager](password_manager)
 
 This is a command line application is used for managing passwords. It allows users to store, retrieve, and manage passwords securely.
 
