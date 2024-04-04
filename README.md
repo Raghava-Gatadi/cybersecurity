@@ -8,7 +8,7 @@ This project is a comprehensive Python application designed to evaluate password
 
 ## [Project 2: Password Manager](Password_manager_checker/password_manager/)
 ### overview
-his project is an efficient command-line password manager designed to enhance user security. It empowers users to generate, store, and retrieve passwords for various accounts. Key features include:
+This project is an efficient command-line password manager designed to enhance user security. It empowers users to generate, store, and retrieve passwords for various accounts. Key features include:
 
 * **Command Line Interface:** A user-friendly and straightforward interface for seamless interaction.
 * **Master Password Validation:** Ensures the authenticity of the user by validating the master password.
