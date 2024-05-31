@@ -31,3 +31,17 @@ This project establishes a secure connection between a client and a server (MacB
 
 This Django project provides a web-based network scanning tool that identifies systems connected to the user's network. Utilizing the Django framework, the application displays the IP addresses and MAC addresses of the connected systems and identifies any open ports on those systems. The project leverages the power of Django's web framework for a user-friendly and interactive experience.
 
+## [Project 5: Real or Fake news detection](RealorFake_political_tweets.ipynb)
+
+### Overview
+
+This project was developed as a mini project during my 6th semester, focusing on detecting fake news using various machine learning models. The primary goal was to build a system capable of distinguishing between real and fake news articles with high accuracy.
+
+### Key Features
+
+- Data Preprocessing: Implemented various data preprocessing techniques such as tokenization, stemming, and removal of stopwords to clean and prepare the dataset for model training.
+- Feature Extraction: Utilized different methods for feature extraction including TF-IDF, Word2Vec, and Word Embedding to convert text data into numerical representations.
+- Model Training: Trained multiple machine learning models, including TF-IDF, BERT, Word2Vec, and Word Embedding, to identify patterns and features indicative of fake news.
+- Performance Evaluation: Assessed the models using standard performance metrics such as Accuracy, Precision, Recall, and F1-score to ensure their effectiveness and reliability.
+
+
