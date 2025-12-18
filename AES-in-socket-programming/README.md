@@ -1,5 +1,3 @@
-## [Project : AES Encryption and Decryption in Socket Programming](Cryptography)
-
 ### Overview
 
 This project establishes a secure connection between a client and a server (MacBook and Windows) using socket programming. The messages exchanged between the client and server are encrypted using the AES (Advanced Encryption Standard) algorithm. The AES function implemented in the code is capable of utilizing 128-, 192-, and 256-bit keys for encryption and decryption.
