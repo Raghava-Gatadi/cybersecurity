@@ -19,7 +19,7 @@ This project is an efficient command-line password manager designed to enhance u
 This project, while simple in its command-line approach, provides a robust solution for password management needs.
 
 
-## [Project 3: AES Encryption and Decryption in Socket Programming](Cryptography)
+## [Project 3: AES Encryption and Decryption in Socket Programming](AES-in-socket-programming)
 
 ### Overview
 
