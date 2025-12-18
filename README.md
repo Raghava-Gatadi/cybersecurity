@@ -31,7 +31,7 @@ This project establishes a secure connection between a client and a server (MacB
 
 This Django project provides a web-based network scanning tool that identifies systems connected to the user's network. Utilizing the Django framework, the application displays the IP addresses and MAC addresses of the connected systems and identifies any open ports on those systems. The project leverages the power of Django's web framework for a user-friendly and interactive experience.
 
-## [Project 5: Real or Fake news detection](RealorFake_political_tweets.ipynb)
+## [Project 5: Real or Fake news detection](RealorFake_political)
 
 ### Overview
 
