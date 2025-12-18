@@ -2,7 +2,7 @@
 
 This repository contains multiple projects focusing on network security, communication and password management. The projects are independent, each serving a unique purpose.
 
-## [Project 1: Password Strength Checker](Password_manager_checker/password_strength.py)
+## Project 1: Password Strength Checker
 ### overview
 This project is a comprehensive Python application designed to evaluate password robustness. It employs a set of predefined criteria, including length, presence of uppercase and lowercase letters, numerical digits, and special characters, to determine the strength of a provided password. The goal of this project is to enhance security by encouraging the use of strong, complex passwords.
 
