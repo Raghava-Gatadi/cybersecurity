@@ -1,47 +1,25 @@
-# Repository: SecureSocketAndScanner
+# Security Learning Collection
 
-This repository contains multiple projects focusing on network security, communication and password management. The projects are independent, each serving a unique purpose.
+Earlier Python experiments in socket encryption, network discovery, password management, steganography, and political-tweet analysis.
 
-## Project 1: Password Strength Checker
-### overview
-This project is a comprehensive Python application designed to evaluate password robustness. It employs a set of predefined criteria, including length, presence of uppercase and lowercase letters, numerical digits, and special characters, to determine the strength of a provided password. The goal of this project is to enhance security by encouraging the use of strong, complex passwords.
+This repository preserves the original collection. Several projects were also copied into standalone repositories, so use the index below to choose the version you want to explore.
 
-## [Project 2: Password Manager](password_manager/passwordManager.py)
-### overview
-This project is an efficient command-line password manager designed to enhance user security. It empowers users to generate, store, and retrieve passwords for various accounts. Key features include:
+## Project index
 
-* **Command Line Interface:** A user-friendly and straightforward interface for seamless interaction.
-* **Master Password Validation:** Ensures the authenticity of the user by validating the master password.
-* **Password Management:** Allows users to create new entries, save them securely, and retrieve them when needed.
-* **Clipboard Integration:** Automatically copies the retrieved password to the clipboard for easy use.
-* **Random Password Generation:** Generates robust passwords composed of alphabets, numbers, and special characters, enhancing account security.
-  
-This project, while simple in its command-line approach, provides a robust solution for password management needs.
+| Folder | What it contains | Standalone repository |
+| --- | --- | --- |
+| [AES-in-socket-programming](AES-in-socket-programming/) | Handwritten AES and client/server socket chat | [AES-Socket-Programming](https://github.com/Raghava-Gatadi/AES-Socket-Programming) |
+| [Network_Scanner](Network_Scanner/) | Django interface for ARP discovery and TCP checks | [Network-Scanner](https://github.com/Raghava-Gatadi/Network-Scanner) |
+| [password_manager](password_manager/) | Python CLI password-storage experiment using MySQL | [Password-Manager](https://github.com/Raghava-Gatadi/Password-Manager) |
+| [Python-projects](Python-projects/) | Scanner, password checker, and steganography scripts | [Python-Scripts](https://github.com/Raghava-Gatadi/Python-Scripts) |
+| [RealorFake_political](RealorFake_political/) | Tweet-analysis notebook and associated paper | Notebook also in [Python-Scripts](https://github.com/Raghava-Gatadi/Python-Scripts) |
 
+## Reading and running
 
-## [Project 3: AES Encryption and Decryption in Socket Programming](AES-in-socket-programming)
+Each folder is independent. Start with its README or inspect its imports and configuration; there is no single setup command for the collection.
 
-### Overview
+These are educational implementations. Do not use the password manager for real credentials or the custom socket protocol for sensitive communication. Network exercises belong in authorized lab environments. No runtime or cryptographic assurance is implied by this catalog.
 
-This project establishes a secure connection between a client and a server (MacBook and Windows) using socket programming. The messages exchanged between the client and server are encrypted using the AES (Advanced Encryption Standard) algorithm. The AES function implemented in the code is capable of utilizing 128-, 192-, and 256-bit keys for encryption and decryption.
+The November 2026 audit confirmed matching source blobs for the three AES source files, the scanner implementation, the password-manager implementation, and the three small Python scripts across their standalone copies. No duplicate files were removed.
 
-## [Project 4: Network Scanner](Network_Scanner)
-
-### Overview
-
-This Django project provides a web-based network scanning tool that identifies systems connected to the user's network. Utilizing the Django framework, the application displays the IP addresses and MAC addresses of the connected systems and identifies any open ports on those systems. The project leverages the power of Django's web framework for a user-friendly and interactive experience.
-
-## [Project 5: Real or Fake news detection](RealorFake_political)
-
-### Overview
-
-This project was developed as a mini project during my 6th semester, focusing on detecting fake news using various machine learning models. The primary goal was to build a system capable of distinguishing between real and fake news articles with high accuracy.
-
-### Key Features
-
-- Data Preprocessing: Implemented various data preprocessing techniques such as tokenization, stemming, and removal of stopwords to clean and prepare the dataset for model training.
-- Feature Extraction: Utilized different methods for feature extraction including TF-IDF, Word2Vec, and Word Embedding to convert text data into numerical representations.
-- Model Training: Trained multiple machine learning models, including TF-IDF, BERT, Word2Vec, and Word Embedding, to identify patterns and features indicative of fake news.
-- Performance Evaluation: Assessed the models using standard performance metrics such as Accuracy, Precision, Recall, and F1-score to ensure their effectiveness and reliability.
-
-
+[Browse newer projects and the full catalog](https://github.com/Raghava-Gatadi/Raghava-Gatadi/blob/main/PROJECTS.md).
