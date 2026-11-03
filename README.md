@@ -1,5 +1,7 @@
 # Security Learning Collection
 
+**Archived:** This earlier collection is archived as a historical record. Continue project work in the standalone repositories linked below. All original artifacts remain available.
+
 Earlier Python experiments in socket encryption, network discovery, password management, steganography, and political-tweet analysis.
 
 This repository preserves the original collection. Several projects were also copied into standalone repositories, so use the index below to choose the version you want to explore.
@@ -8,11 +10,11 @@ This repository preserves the original collection. Several projects were also co
 
 | Folder | What it contains | Standalone repository |
 | --- | --- | --- |
-| [AES-in-socket-programming](AES-in-socket-programming/) | Handwritten AES and client/server socket chat | [AES-Socket-Programming](https://github.com/Raghava-Gatadi/AES-Socket-Programming) |
-| [Network_Scanner](Network_Scanner/) | Django interface for ARP discovery and TCP checks | [Network-Scanner](https://github.com/Raghava-Gatadi/Network-Scanner) |
-| [password_manager](password_manager/) | Python CLI password-storage experiment using MySQL | [Password-Manager](https://github.com/Raghava-Gatadi/Password-Manager) |
-| [Python-projects](Python-projects/) | Scanner, password checker, and steganography scripts | [Python-Scripts](https://github.com/Raghava-Gatadi/Python-Scripts) |
-| [RealorFake_political](RealorFake_political/) | Tweet-analysis notebook and associated paper | Notebook also in [Python-Scripts](https://github.com/Raghava-Gatadi/Python-Scripts) |
+| [AES-in-socket-programming](AES-in-socket-programming/) | Handwritten AES and client/server socket chat | [AES-Socket-Programming](https://github.com/Raghava-Gatadi/aes-socket-chat) |
+| [Network_Scanner](Network_Scanner/) | Django interface for ARP discovery and TCP checks | [Network-Scanner](https://github.com/Raghava-Gatadi/django-network-scanner) |
+| [password_manager](password_manager/) | Python CLI password-storage experiment using MySQL | [Password-Manager](https://github.com/Raghava-Gatadi/cli-password-manager) |
+| [Python-projects](Python-projects/) | Scanner, password checker, and steganography scripts | [Python-Scripts](https://github.com/Raghava-Gatadi/python-learning-experiments) |
+| [RealorFake_political](RealorFake_political/) | Tweet-analysis notebook and associated paper | Notebook also in [Python-Scripts](https://github.com/Raghava-Gatadi/python-learning-experiments) |
 
 ## Reading and running
 
